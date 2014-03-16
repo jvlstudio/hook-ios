@@ -9,7 +9,7 @@
 #import "DLAuth.h"
 
 @implementation DLAuth
--(instancetype)initWithClient:(DLApi*)client
+- (instancetype)initWithClient:(DLApi*)client
 {
     self = [super init];
     if (!self) {
@@ -18,4 +18,10 @@
     _client = client;
     return self;
 }
+
+- (BOOL)hasAuthToken
+{
+    return _authToken != NULL;
+}
+
 @end

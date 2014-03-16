@@ -12,6 +12,11 @@
 @class DLApi;
 
 @interface DLAuth : NSObject
+
 @property(readonly, assign) DLApi* client;
--(instancetype)initWithClient:(DLApi*)client;
+@property(readonly, assign) NSString* authToken;
+
+- (instancetype)initWithClient:(DLApi*)client;
+- (BOOL)hasAuthToken;
+
 @end
