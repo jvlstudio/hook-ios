@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DLApi.h"
+
+@class DLApi;
 
 @interface DLAuth : NSObject
-
+@property(readonly, assign) DLApi* client;
+-(instancetype)initWithClient:(DLApi*)client;
 @end

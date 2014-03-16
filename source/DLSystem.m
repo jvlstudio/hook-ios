@@ -10,4 +10,13 @@
 
 @implementation DLSystem
 
+-(instancetype)initWithClient:(DLApi*)client
+{
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _client = client;
+    return self;
+}
 @end

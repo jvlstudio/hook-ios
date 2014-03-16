@@ -12,5 +12,7 @@
 @class DLApi;
 
 @interface DLCollection : NSObject
+@property(readonly, assign) DLApi* client;
+@property(readonly, assign) NSString* name;
 - (instancetype)init:(DLApi*)client withName:(NSString*)name;
 @end

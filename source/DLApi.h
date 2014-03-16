@@ -16,6 +16,12 @@
 #import "DLKeyValues.h"
 
 @class DLCollection;
+@class DLAuth;
+@class DLFiles;
+@class DLSystem;
+@class DLKeyValues;
+@class DLChannel;
+
 @interface DLApi : NSObject
 
 @property (readonly, strong) DLAuth* auth;

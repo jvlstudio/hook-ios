@@ -11,12 +11,19 @@
 @implementation DLCollection
 
 - (instancetype)init{
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
     return self;
 }
 
+
 - (instancetype)init:(DLApi*)client withName:(NSString*)name
 {
-    return self;
+    _client = client;
+    _name = name;
+    return [self init];
 }
 
 @end

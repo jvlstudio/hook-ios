@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DLApi.h"
+
+@class DLFiles;
 
 @interface DLFiles : NSObject
-
+@property(readonly, assign) DLApi* client;
+-(instancetype)initWithClient:(DLApi*)client;
 @end
