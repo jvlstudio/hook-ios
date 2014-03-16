@@ -41,6 +41,8 @@
 - (void)remove:(int)itemId withBlock:(void (^)(DLRequest *request))block;
 - (void)dropWithBlock:(void (^)(DLRequest *request))block;
 
+- (instancetype)where:(NSString*)field andValue:(id)value;
+- (instancetype)where:(NSString*)field withOperation:(NSString*)operation andValue:(id)value;
 - (instancetype)group:(NSString*)field;
 - (instancetype)groupWithArray:(NSArray*)fields;
 - (instancetype)sort:(NSString*)field withDirection:(int)direction;

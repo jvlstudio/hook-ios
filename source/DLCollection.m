@@ -87,6 +87,18 @@
     
 }
 
+- (instancetype)where:(NSString*)field andValue:(id)value
+{
+    return [self where:field withOperation:@"=" andValue:value];
+}
+
+- (instancetype)where:(NSString*)field withOperation:(NSString*)operation andValue:(id)value
+{
+    NSDictionary *whereDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"field", field, @"operation", operation, @"value", value, nil];
+    [_wheres addObject:whereDict];
+    return self;
+}
+
 - (instancetype)group:(NSString*)field
 {
     [_group addObject:field];
