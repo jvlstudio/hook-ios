@@ -27,14 +27,20 @@
 - (instancetype)init:(DLApi*)client withName:(NSString*)name;
 - (void)reset;
 - (NSDictionary*)query;
+- (void)optionsOperation:(NSString*)method withField:(NSString*)field andValue:(id)value;
+- (void)optionsAggregation:(NSString*)method withField:(NSString*)field;
 
 - (void)getWithBlock:(void (^)(DLRequest *request))block;
 - (void)getFirstWithBlock:(void (^)(DLRequest *request))block;
 - (void)getFirstOrCreate:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block;
-- (void)getMaxWithBlock:(void (^)(DLRequest *request))block;
-- (void)getMinWithBlock:(void (^)(DLRequest *request))block;
-- (void)getAvgWithBlock:(void (^)(DLRequest *request))block;
-- (void)getSumWithBlock:(void (^)(DLRequest *request))block;
+
+- (void)increment:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block;
+- (void)decrement:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block;
+- (void)count:(NSString*)field withBlock:(void (^)(DLRequest *request))block;
+- (void)min:(NSString*)field withBlock:(void (^)(DLRequest *request))block;
+- (void)max:(NSString*)field withBlock:(void (^)(DLRequest *request))block;
+- (void)avg:(NSString*)field withBlock:(void (^)(DLRequest *request))block;
+- (void)sum:(NSString*)field withBlock:(void (^)(DLRequest *request))block;
 
 - (void)create:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block;
 - (void)update:(int)itemId withParams:(NSDictionary*)params andBlock:(void (^)(DLRequest *request))block;

@@ -21,6 +21,12 @@
 
 - (instancetype)init:(DLApi*)client withName:(NSString*)name
 {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-z_//0-9]+$" options:0 error:nil];
+    
+    if(![regex matchesInString:name options:0 range:NSMakeRange(0, name.length)]){
+        @throw[NSException exceptionWithName:@"DLCollection" reason:@"Invalid name" userInfo:nil];
+    }
+    
     _client = client;
     _name = name;
     _segments = [NSString stringWithFormat:@"collection/%@", _name];
@@ -30,37 +36,48 @@
 
 - (void)getWithBlock:(void (^)(DLRequest *request))block
 {
-    
+    [_client GET:_segments parameters:[self query] success:nil failure:nil];
 }
 
 - (void)getFirstWithBlock:(void (^)(DLRequest *request))block
 {
-    
+    [_options setObject:[NSNumber numberWithInt:1] forKey:@"first"];
+    [self getWithBlock:block];
 }
 
 - (void)getFirstOrCreate:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
-    
+    @throw[NSException exceptionWithName:@"DLCollection.getFirstOrCreate" reason:@"Not implemented" userInfo:nil];
 }
 
-- (void)getMaxWithBlock:(void (^)(DLRequest *request))block
+- (void)count:(NSString*)field withBlock:(void (^)(DLRequest *request))block
 {
-    
+    [self optionsAggregation:@"count" withField:field];
+    [self getWithBlock:block];
 }
 
-- (void)getMinWithBlock:(void (^)(DLRequest *request))block
+- (void)max:(NSString*)field withBlock:(void (^)(DLRequest *request))block
 {
-    
+    [self optionsAggregation:@"max" withField:field];
+    [self getWithBlock:block];
 }
 
-- (void)getAvgWithBlock:(void (^)(DLRequest *request))block
+- (void)min:(NSString*)field withBlock:(void (^)(DLRequest *request))block
 {
-    
+    [self optionsAggregation:@"min" withField:field];
+    [self getWithBlock:block];
 }
 
-- (void)getSumWithBlock:(void (^)(DLRequest *request))block
+- (void)avg:(NSString*)field withBlock:(void (^)(DLRequest *request))block
 {
-    
+    [self optionsAggregation:@"avg" withField:field];
+    [self getWithBlock:block];
+}
+
+- (void)sum:(NSString*)field withBlock:(void (^)(DLRequest *request))block
+{
+    [self optionsAggregation:@"sum" withField:field];
+    [self getWithBlock:block];
 }
 
 - (void)create:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
@@ -79,6 +96,18 @@
 - (void)updateAll:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
     [_options setObject:params forKey:@"data"];
+    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
+}
+
+- (void)increment:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block
+{
+    [self optionsOperation:@"increment" withField:field andValue:value];
+    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
+}
+
+- (void)decrement:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block
+{
+    [self optionsOperation:@"decrement" withField:field andValue:value];
     [_client PUT:_segments parameters:[self query] success:nil failure:nil];
 }
 
@@ -153,6 +182,18 @@
     _group = [[NSMutableArray alloc] init];
     _limit = nil;
     _offset = nil;
+}
+
+- (void)optionsOperation:(NSString*)method withField:(NSString*)field andValue:(id)value
+{
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"method", method, @"field", field, @"value", value, nil];
+    [_options setObject:dict forKey:@"operation"];
+}
+
+- (void)optionsAggregation:(NSString*)method withField:(NSString*)field
+{
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"method", method, @"field", field, @"value", nil, nil];
+    [_options setObject:dict forKey:@"aggregation"];
 }
 
 - (NSDictionary*)query
