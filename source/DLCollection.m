@@ -23,6 +23,7 @@
 {
     _client = client;
     _name = name;
+    _segments = [NSString stringWithFormat:@"collection/%@", _name];
     [self reset];
     return [self init];
 }
@@ -69,22 +70,26 @@
 
 - (void)update:(int)itemId withParams:(NSDictionary*)params andBlock:(void (^)(DLRequest *request))block
 {
-    
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"data", params, nil];
+    NSString *url = [NSString stringWithFormat:@"%@/%i", _segments, itemId];
+    [_client PUT:url parameters:dict success:nil failure:nil];
 }
 
 - (void)updateAll:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
-    
+    [_options setObject:params forKey:@"data"];
+    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
 }
 
 - (void)remove:(int)itemId withBlock:(void (^)(DLRequest *request))block
 {
-    
+    NSString *url = [NSString stringWithFormat:@"%@/%i", _segments, itemId];
+    [_client DELETE:url success:nil failure:nil];
 }
 
 - (void)dropWithBlock:(void (^)(DLRequest *request))block
 {
-    
+    [_client DELETE:_segments success:nil failure:nil];
 }
 
 - (instancetype)where:(NSString*)field andValue:(id)value

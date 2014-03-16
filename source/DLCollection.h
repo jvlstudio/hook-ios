@@ -16,6 +16,7 @@
 
 @property(readonly, assign) DLApi* client;
 @property(readonly, assign) NSString* name;
+@property(readonly, assign) NSString* segments;
 @property(readonly, strong) NSMutableDictionary* options;
 @property(readonly, strong) NSMutableArray* wheres;
 @property(readonly, strong) NSMutableArray* ordering;

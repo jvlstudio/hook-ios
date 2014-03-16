@@ -69,11 +69,10 @@
 }
 
 - (DLRequest*)DELETE:(NSString*) segments
-          parameters:(NSDictionary*)params
              success:(void (^)(DLRequest *request, id response))success
              failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    return [self requestWithMethod:@"DELETE" segments:segments parameters:params
+    return [self requestWithMethod:@"DELETE" segments:segments parameters:nil
                            success:success failure:failure];
 
 }

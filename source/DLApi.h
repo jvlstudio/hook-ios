@@ -54,7 +54,6 @@
            failure:(void (^)(DLRequest *request, NSError* error))failure;
 
 - (DLRequest*)DELETE:(NSString*) segments
-        parameters:(NSDictionary*)params
            success:(void (^)(DLRequest *request, id response))success
            failure:(void (^)(DLRequest *request, NSError* error))failure;
 
