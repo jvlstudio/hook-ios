@@ -24,6 +24,8 @@
 
 @interface DLApi : NSObject
 
+@property (readonly, strong) NSString *appId;
+@property (readonly, strong) NSString *key;
 @property (readonly, strong) DLAuth* auth;
 @property (readonly, strong) DLFiles* files;
 @property (readonly, strong) DLSystem* system;

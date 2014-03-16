@@ -17,6 +17,8 @@
         return nil;
     }
     
+    _key = key;
+    _appId = app;
     _auth = [[DLAuth alloc] initWithClient:self];
     _files = [[DLFiles alloc] initWithClient:self];
     _keys = [[DLKeyValues alloc] initWithClient:self];
