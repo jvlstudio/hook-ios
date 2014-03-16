@@ -10,35 +10,48 @@
 #import "DLCollection.h"
 #import "DLChannel.h"
 #import "DLRequest.h"
+#import "DLAuth.h"
+#import "DLFiles.h"
+#import "DLSystem.h"
+#import "DLKeyValues.h"
 
+@class DLCollection;
 @interface DLApi : NSObject
 
-- (DLCollection*) collection:(NSString*) name;
-- (DLChannel*) channel:(NSString*) name withParams:(NSDictionary*)params;
-- (DLRequest*) requestWithMethod:(NSString*)method parameters:(NSDictionary*)params;
+@property (readonly, strong) DLAuth* auth;
+@property (readonly, strong) DLFiles* files;
+@property (readonly, strong) DLSystem* system;
+@property (readonly, strong) DLKeyValues* keys;
 
-- (DLRequest*) GET:(NSString*) segments
-        parameters:(NSDictionary*)params
+- (instancetype)initWithKey:(NSString*)key andAppId:(NSString*)app;
+
+- (DLCollection*)collection:(NSString*)name;
+
+- (DLChannel*)channel:(NSString*)name withParams:(NSDictionary*)params;
+
+- (DLRequest*)GET:(NSString*) segments
+       parameters:(NSDictionary*)params
            success:(void (^)(DLRequest *request, id response))success
             failure:(void (^)(DLRequest *request, NSError* error))failure;
 
-- (DLRequest*) GET:(NSString*) segments
+- (DLRequest*)POST:(NSString*) segments
         parameters:(NSDictionary*)params
            success:(void (^)(DLRequest *request, id response))success
            failure:(void (^)(DLRequest *request, NSError* error))failure;
 
-- (DLRequest*) POST:(NSString*) segments
+- (DLRequest*)PUT:(NSString*) segments
         parameters:(NSDictionary*)params
            success:(void (^)(DLRequest *request, id response))success
            failure:(void (^)(DLRequest *request, NSError* error))failure;
 
-- (DLRequest*) PUT:(NSString*) segments
+- (DLRequest*)DELETE:(NSString*) segments
         parameters:(NSDictionary*)params
            success:(void (^)(DLRequest *request, id response))success
            failure:(void (^)(DLRequest *request, NSError* error))failure;
 
-- (DLRequest*) DELETE:(NSString*) segments
-        parameters:(NSDictionary*)params
-           success:(void (^)(DLRequest *request, id response))success
-           failure:(void (^)(DLRequest *request, NSError* error))failure;
+- (DLRequest*)requestWithMethod:(NSString*)method
+                       segments:(NSString*)segments
+                     parameters:(NSDictionary*)params
+                        success:(void (^)(DLRequest *request, id response))success
+                        failure:(void (^)(DLRequest *request, NSError* error))failure;
 @end

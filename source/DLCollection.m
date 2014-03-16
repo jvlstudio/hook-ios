@@ -10,4 +10,13 @@
 
 @implementation DLCollection
 
+- (instancetype)init{
+    return self;
+}
+
+- (instancetype)init:(DLApi*)client withName:(NSString*)name
+{
+    return self;
+}
+
 @end

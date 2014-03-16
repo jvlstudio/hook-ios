@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DLApi.h"
+
+@class DLApi;
 
 @interface DLCollection : NSObject
-
+- (instancetype)init:(DLApi*)client withName:(NSString*)name;
 @end
