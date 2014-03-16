@@ -14,8 +14,6 @@
 @property(nonatomic, retain) NSString* url;
 
 - (void)start;
-- (void)pause;
-- (void)cancel;
 - (instancetype)initWithURL:(NSString*)url;
 - (void)setValue:(NSString*)value forHeader:(NSString *)header;
 - (void)setCompletionBlockWithSuccess:(void (^)(DLRequest *request, id response))success

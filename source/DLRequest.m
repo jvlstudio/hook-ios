@@ -24,16 +24,6 @@
     
 }
 
-- (void)pause
-{
-    
-}
-
-- (void)cancel
-{
-    
-}
-
 - (void)setValue:(NSString*)value forHeader:(NSString *)header
 {
     
