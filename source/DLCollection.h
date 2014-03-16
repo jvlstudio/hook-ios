@@ -13,8 +13,16 @@
 @class DLApi;
 
 @interface DLCollection : NSObject
+
 @property(readonly, assign) DLApi* client;
 @property(readonly, assign) NSString* name;
+@property(readonly, strong) NSMutableDictionary* options;
+@property(readonly, strong) NSMutableArray* wheres;
+@property(readonly, strong) NSMutableArray* ordering;
+@property(readonly, strong) NSMutableArray* group;
+@property(readonly, strong) NSNumber* limit;
+@property(readonly, strong) NSNumber* offset;
+
 - (instancetype)init:(DLApi*)client withName:(NSString*)name;
 - (void)reset;
 - (NSDictionary*)query;
