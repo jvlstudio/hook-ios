@@ -10,4 +10,39 @@
 
 @implementation DLRequest
 
+- (instancetype)initWithURL:(NSString*)url{
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    _url = url;
+    return self;
+}
+
+- (void)start
+{
+    
+}
+
+- (void)pause
+{
+    
+}
+
+- (void)cancel
+{
+    
+}
+
+- (void)setValue:(NSString*)value forHeader:(NSString *)header
+{
+    
+}
+
+- (void)setCompletionBlockWithSuccess:(void (^)(DLRequest *request, id response))success
+                              failure:(void (^)(DLRequest *request, NSError* error))failure
+{
+    
+}
+
 @end

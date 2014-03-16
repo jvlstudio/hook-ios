@@ -24,6 +24,7 @@
 
 @interface DLApi : NSObject
 
+@property (readonly, strong) NSString *url;
 @property (readonly, strong) NSString *appId;
 @property (readonly, strong) NSString *key;
 @property (readonly, strong) DLAuth* auth;
@@ -31,7 +32,7 @@
 @property (readonly, strong) DLSystem* system;
 @property (readonly, strong) DLKeyValues* keys;
 
-- (instancetype)initWithKey:(NSString*)key andAppId:(NSString*)app;
+- (instancetype)initWithURL:(NSString*) url key:(NSString*)key appId:(NSString*)appId;
 
 - (DLCollection*)collection:(NSString*)name;
 

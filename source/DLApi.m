@@ -10,7 +10,7 @@
 
 @implementation DLApi
 
-- (instancetype)initWithKey:(NSString*)key andAppId:(NSString*)app
+- (instancetype)initWithURL:(NSString*) url key:(NSString*)key appId:(NSString*)appId
 {
     self = [super init];
     if (!self) {
@@ -18,7 +18,7 @@
     }
     
     _key = key;
-    _appId = app;
+    _appId = appId;
     _auth = [[DLAuth alloc] initWithClient:self];
     _files = [[DLFiles alloc] initWithClient:self];
     _keys = [[DLKeyValues alloc] initWithClient:self];
@@ -44,7 +44,8 @@
           success:(void (^)(DLRequest *request, id response))success
           failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    return nil;
+    return [self requestWithMethod:@"GET" segments:segments parameters:params
+                           success:success failure:failure];
 }
 
 - (DLRequest*)POST:(NSString*) segments
@@ -52,7 +53,9 @@
            success:(void (^)(DLRequest *request, id response))success
            failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    return nil;
+    return [self requestWithMethod:@"POST" segments:segments parameters:params
+                           success:success failure:failure];
+
 }
 
 - (DLRequest*)PUT:(NSString*) segments
@@ -60,7 +63,9 @@
           success:(void (^)(DLRequest *request, id response))success
           failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    return nil;
+    return [self requestWithMethod:@"PUT" segments:segments parameters:params
+                           success:success failure:failure];
+
 }
 
 - (DLRequest*)DELETE:(NSString*) segments
@@ -68,7 +73,9 @@
              success:(void (^)(DLRequest *request, id response))success
              failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    return nil;
+    return [self requestWithMethod:@"DELETE" segments:segments parameters:params
+                           success:success failure:failure];
+
 }
 
 - (DLRequest*)requestWithMethod:(NSString*)method
@@ -77,26 +84,21 @@
                         success:(void (^)(DLRequest *request, id response))success
                         failure:(void (^)(DLRequest *request, NSError* error))failure
 {
-    /*
-     Request request = new Request();
-     request.method = method;
-     request.data = data;
-     request.addHeader("Content-Type", "application/json");
-     request.addHeader("X-App-Id", appId);
-     request.addHeader("X-App-Key", key);
-     
-     Log.d("dl-api", "request "+data.toString());
-     Log.d("dl-api", "URL_request "+this.url + "/" + segments);
-     
-     if(auth.hasAuthToken()){
-     request.addHeader("X-Auth-Token", auth.getAuthToken());
-     }
-     
-     request.setResponder(responder);
-     
-     request.execute(this.url + "/" + segments);
-     return request;*/
-    return nil;
+    NSString *url = [NSString stringWithFormat:@"%@/%@", _url, segments];
+    DLRequest *request = [[DLRequest alloc] initWithURL:url];
+    [request setMethod:method];
+    [request setData:params];
+    [request setValue:@"application/json" forHeader:@"Content-Type"];
+    [request setValue:_appId forHeader:@"X-App-Id"];
+    [request setValue:_key forHeader:@"X-App-Key"];
+    
+    if([_auth hasAuthToken]){
+        [request setValue:_auth.authToken forKey:@"X-Auth-Token"];
+    }
+    
+    [request setCompletionBlockWithSuccess:success failure:failure];
+    [request start];
+    return request;
 }
 
 
