@@ -65,14 +65,15 @@
 
 - (void)create:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
-    
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"data", params, nil];
+    [_client POST:_segments parameters:dict success:nil failure:nil];
 }
 
 - (void)update:(int)itemId withParams:(NSDictionary*)params andBlock:(void (^)(DLRequest *request))block
 {
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"data", params, nil];
     NSString *url = [NSString stringWithFormat:@"%@/%i", _segments, itemId];
-    [_client PUT:url parameters:dict success:nil failure:nil];
+    [_client POST:url parameters:dict success:nil failure:nil];
 }
 
 - (void)updateAll:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
