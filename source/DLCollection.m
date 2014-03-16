@@ -94,8 +94,8 @@
 
 - (instancetype)where:(NSString*)field withOperation:(NSString*)operation andValue:(id)value
 {
-    NSDictionary *whereDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"field", field, @"operation", operation, @"value", value, nil];
-    [_wheres addObject:whereDict];
+    NSArray *whereClause = [[NSArray alloc] initWithObjects:field, operation, value, nil];
+    [_wheres addObject:whereClause];
     return self;
 }
 
@@ -151,8 +151,42 @@
 
 - (NSDictionary*)query
 {
-    [self reset];
-    return nil;
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    if(_limit != nil){
+        [dict setObject:_limit forKey:@"limit"];
+    }
+    if(_offset != nil){
+        [dict setObject:_offset forKey:@"offset"];
+    }
+    if(_wheres != nil && [_wheres count] > 0){
+        [dict setObject:_wheres forKey:@"q"];
+    }
+    if(_ordering != nil && [_ordering count] > 0){
+        [dict setObject:_ordering forKey:@"s"];
+    }
+    if(_group != nil && [_group count] > 0){
+        [dict setObject:_group forKey:@"g"];
+    }
+    if(_options != nil){
+        if([_options objectForKey:@"data"]){
+            [dict setObject:[_options objectForKey:@"data"] forKey:@"d"];
+        }
+        
+        if([_options objectForKey:@"first"]){
+            [dict setObject:[_options objectForKey:@"first"] forKey:@"first"];
+        }
+        
+        if([_options objectForKey:@"aggregation"]){
+            [dict setObject:[_options objectForKey:@"aggregation"] forKey:@"aggr"];
+        }
+        if([_options objectForKey:@"operation"]){
+            [dict setObject:[_options objectForKey:@"operation"] forKey:@"op"];
+        }
+    }
+    
+    [self reset]; //clear for future calls
+    return dict;
 }
 
 @end
