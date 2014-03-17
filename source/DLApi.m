@@ -83,7 +83,7 @@
     [request setValue:_key forHeader:@"X-App-Key"];
     
     if([_auth hasAuthToken]){
-        [request setValue:_auth.authToken forKey:@"X-Auth-Token"];
+        [request setValue:_auth.authToken forHeader:@"X-Auth-Token"];
     }
     
     [request setCompletionBlock:block];

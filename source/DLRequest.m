@@ -59,7 +59,6 @@ static NSString * URLEncode(NSString *string, NSStringEncoding encoding) {
         [request setValue:[_headers objectForKey:key] forHTTPHeaderField:key];
     }
     
-    NSLog(@"%@", _url);
     _operation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self setError:nil];
         [self setResponse:responseObject];

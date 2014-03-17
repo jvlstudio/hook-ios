@@ -25,8 +25,9 @@ NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if([defaults objectForKey:_authDataKey]){
-        _authToken = [defaults objectForKey:_authTokenKey];
-        [self registerUser:[defaults objectForKey:_authDataKey]];
+        NSData *encodedUser = [defaults objectForKey:_authDataKey];
+        _authToken = [[defaults objectForKey:_authTokenKey] objectForKey:@"token"];
+        [self registerUser:[NSKeyedUnarchiver unarchiveObjectWithData:encodedUser]];
     }
     return self;
 }
@@ -34,13 +35,27 @@ NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
 - (void)authenticate:(NSDictionary*)data usingProvider:(NSString*)provider block:(DLRequestBlock)block
 {
     NSString *url = [NSString stringWithFormat:@"auth/%@", provider];
-    [_client POST:url parameters:data block:block];
+    [_client POST:url parameters:data block:^(DLRequest *request){
+        if([request error] == NULL){
+            [self registerAuthToken:[request response]];
+        }
+        if(block != NULL){
+            block(request);
+        }
+    }];
 }
 
 - (void)verify:(NSDictionary*)data usingProvider:(NSString*)provider block:(DLRequestBlock)block
 {
     NSString *url = [NSString stringWithFormat:@"auth/%@/verify", provider];
-    [_client POST:url parameters:data block:block];
+    [_client POST:url parameters:data block:^(DLRequest *request){
+        if([request error] == NULL){
+            [self registerAuthToken:[request response]];
+        }
+        if(block != NULL){
+            block(request);
+        }
+    }];
 }
 
 - (void)forgotPassword:(NSDictionary*)data block:(DLRequestBlock)block
@@ -67,10 +82,11 @@ NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
         [defaults removeObjectForKey:_authTokenKey];
         [defaults removeObjectForKey:_authDataKey];
     }else{
-        [defaults setObject:data forKey:_authDataKey];
+        NSData *encodedData = [NSKeyedArchiver archivedDataWithRootObject:data];
+        [defaults setObject:encodedData forKey:_authDataKey];
     }
-
-    [self registerUser:data];
+    
+    [defaults synchronize];
 }
 
 - (void)registerAuthToken:(NSDictionary*)data
