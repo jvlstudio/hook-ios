@@ -10,6 +10,11 @@
 
 @implementation DLRequest
 
+static NSString * const kCharactersToBeEscapedInQueryString = @":/?&=;+!@#$()',*";
+static NSString * URLEncode(NSString *string, NSStringEncoding encoding) {
+	return (__bridge_transfer  NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)string, NULL, (__bridge CFStringRef)kCharactersToBeEscapedInQueryString, CFStringConvertNSStringEncodingToEncoding(encoding));
+}
+
 - (instancetype)initWithURL:(NSString*)url{
     self = [super init];
     if (!self) {
@@ -24,7 +29,22 @@
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSError *serializeError = NULL;
-    NSMutableURLRequest* request = [[AFJSONRequestSerializer serializer] requestWithMethod:_method URLString:_url parameters:_data error:&serializeError];
+    NSMutableURLRequest* request;
+    
+    if([_method isEqualToString:@"GET"]){
+        
+        NSString *_queryString = @"";
+        if(_data != NULL){
+            NSData *data = [NSJSONSerialization dataWithJSONObject:_data options:kNilOptions error:&serializeError];
+            NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            _queryString = [@"?" stringByAppendingString:URLEncode(json, NSASCIIStringEncoding)];
+        }
+        
+        request = [[AFJSONRequestSerializer serializer] requestWithMethod:_method URLString:[_url stringByAppendingString:_queryString] parameters:nil error:&serializeError];
+        
+    }else{
+       request = [[AFJSONRequestSerializer serializer] requestWithMethod:_method URLString:_url parameters:_data error:&serializeError];
+    }
     
     if(serializeError != NULL){
         [self setError:serializeError];

@@ -149,15 +149,13 @@
 
 - (instancetype)sort:(NSString*)field withDirection:(int)direction
 {
-    NSDictionary *sortDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"field", field, @"direction", direction, nil];
-    [_ordering addObject:sortDict];
-    return self;
+    return [self sort:field withDirectionString:direction == -1 ? @"desc" : @"asc"];
 }
 
 - (instancetype)sort:(NSString*)field withDirectionString:(NSString*)direction
 {
-    int num = [direction isEqualToString:@"asc"] ? 1 : -1;
-    return [self sort:field withDirection:num];
+    [_ordering addObject:@[field, direction]];
+    return self;
 }
 
 - (instancetype)limit:(int)num

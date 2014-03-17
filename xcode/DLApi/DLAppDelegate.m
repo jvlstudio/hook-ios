@@ -22,6 +22,7 @@
     
     NSDictionary* dict = @{@"name" : @"Gabriel", @"age" : [NSNumber numberWithInt:25]};
     
+    //Create
     [[api collection:@"ios"] create:dict withBlock:^(DLRequest* request){
         if([request error] == NULL){
             NSLog(@"whoa! %@", [request response]);
@@ -29,6 +30,24 @@
             NSLog(@"error! %@", [request response]);
         }
     }];
+    
+    //Fetch first
+    [[api collection:@"test"] getFirstWithBlock:^(DLRequest* request){
+        NSLog(@"getFirst %@", [request response]);
+    }];
+    
+    //Filtering
+    [[[api collection:@"ios"] where:@"age" andValue:[NSNumber numberWithInt:30]] getWithBlock:^(DLRequest* request){
+        NSLog(@"filtering %@", [request response]);
+    }];
+    
+    //Sorting
+    [[[api collection:@"ios"] sort:@"created_at" withDirectionString:@"desc"] getWithBlock:^(DLRequest* request){
+        NSLog(@"sorting %@", [request response]);
+    }];
+    
+    
+    
     return YES;
 }
 
