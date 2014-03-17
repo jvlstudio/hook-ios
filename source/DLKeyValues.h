@@ -14,4 +14,6 @@
 @interface DLKeyValues : NSObject
 @property(readonly, assign) DLApi* client;
 -(instancetype)initWithClient:(DLApi*)client;
+-(void)getValue:(NSString*)key block:(DLRequestBlock)block;
+-(void)setValue:(id)value forKey:(NSString*)key block:(DLRequestBlock)block;
 @end

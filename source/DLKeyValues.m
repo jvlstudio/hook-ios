@@ -18,4 +18,16 @@
     _client = client;
     return self;
 }
+
+-(void)getValue:(NSString*)key block:(DLRequestBlock)block
+{
+    NSString *_url = [NSString stringWithFormat:@"key/%@", key];
+    [_client GET:_url parameters:nil block:block];
+}
+
+-(void)setValue:(id)value forKey:(NSString*)key block:(DLRequestBlock)block
+{
+    NSString *_url = [NSString stringWithFormat:@"key/%@", key];
+    [_client POST:_url parameters:@{@"data":value} block:block];
+}
 @end
