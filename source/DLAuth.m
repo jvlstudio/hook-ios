@@ -8,6 +8,9 @@
 
 #import "DLAuth.h"
 
+NSString* const AUTH_TOKEN_KEY = @"dl-api-auth-token";
+NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
+
 @implementation DLAuth
 - (instancetype)initWithClient:(DLApi*)client
 {
@@ -16,6 +19,15 @@
         return nil;
     }
     _client = client;
+    _authTokenKey = [NSString stringWithFormat:@"%@-%@", _client.appId, AUTH_TOKEN_KEY];
+    _authDataKey = [NSString stringWithFormat:@"%@-%@", _client.appId, AUTH_DATA_KEY];
+    
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:_authDataKey]){
+        _authToken = [defaults objectForKey:_authTokenKey];
+        [self registerUser:[defaults objectForKey:_authDataKey]];
+    }
     return self;
 }
 
@@ -43,7 +55,34 @@
 
 - (void)logout
 {
+    [self registerUser:nil];
+}
+
+- (void)registerUser:(NSDictionary*)data
+{
+    _user = data;
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(_user == NULL){
+        [defaults removeObjectForKey:_authTokenKey];
+        [defaults removeObjectForKey:_authDataKey];
+    }else{
+        [defaults setObject:data forKey:_authDataKey];
+    }
+
+    [self registerUser:data];
+}
+
+- (void)registerAuthToken:(NSDictionary*)data
+{
+    if([data objectForKey:@"token"]){
+        NSString *token = [data objectForKey:@"token"];
+        _authToken = token;
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:token forKey:_authTokenKey];
+        [defaults synchronize];
+        [self registerUser:data];
+    }
 }
 
 - (BOOL)hasAuthToken
