@@ -7,6 +7,7 @@
 //
 
 #import "DLAppDelegate.h"
+#import "DLApi.h"
 
 @implementation DLAppDelegate
 
@@ -16,6 +17,18 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    DLApi *api = [[DLApi alloc] initWithURL:@"http://dl-api.ddll.co" key:@"q1uU7tFtXnLad6FIGGn2cB+gxcx64/uPoDhqe2Zn5AE=" appId:@"1"];
+    
+    NSDictionary* dict = @{@"name" : @"Gabriel", @"age" : [NSNumber numberWithInt:25]};
+    
+    [[api collection:@"ios"] create:dict withBlock:^(DLRequest* request){
+        if([request error] == NULL){
+            NSLog(@"whoa! %@", [request response]);
+        }else{
+            NSLog(@"error! %@", [request response]);
+        }
+    }];
     return YES;
 }
 

@@ -40,26 +40,21 @@
 
 - (DLRequest*)GET:(NSString*) segments
        parameters:(NSDictionary*)params
-           success:(void (^)(DLRequest *request, id response))success
-            failure:(void (^)(DLRequest *request, NSError* error))failure;
+            block:(DLRequestBlock)block;
 
 - (DLRequest*)POST:(NSString*) segments
         parameters:(NSDictionary*)params
-           success:(void (^)(DLRequest *request, id response))success
-           failure:(void (^)(DLRequest *request, NSError* error))failure;
+            block:(DLRequestBlock)block;
 
 - (DLRequest*)PUT:(NSString*) segments
         parameters:(NSDictionary*)params
-           success:(void (^)(DLRequest *request, id response))success
-           failure:(void (^)(DLRequest *request, NSError* error))failure;
+            block:(DLRequestBlock)block;
 
 - (DLRequest*)DELETE:(NSString*) segments
-           success:(void (^)(DLRequest *request, id response))success
-           failure:(void (^)(DLRequest *request, NSError* error))failure;
+            block:(DLRequestBlock)block;
 
 - (DLRequest*)requestWithMethod:(NSString*)method
                        segments:(NSString*)segments
                      parameters:(NSDictionary*)params
-                        success:(void (^)(DLRequest *request, id response))success
-                        failure:(void (^)(DLRequest *request, NSError* error))failure;
+                          block:(DLRequestBlock)block;
 @end

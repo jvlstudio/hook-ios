@@ -7,7 +7,6 @@
 //
 
 #import "DLRequest.h"
-#import "AFNetworking.h"
 
 @implementation DLRequest
 
@@ -24,24 +23,43 @@
 - (void)execute
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSMutableURLRequest* request = [[AFJSONRequestSerializer serializer] requestWithMethod:_method URLString:_url parameters:_data error:nil];
+    NSError *serializeError = NULL;
+    NSMutableURLRequest* request = [[AFJSONRequestSerializer serializer] requestWithMethod:_method URLString:_url parameters:_data error:&serializeError];
     
+    if(serializeError != NULL){
+        [self setError:serializeError];
+        if(_completionBlock != NULL){
+            _completionBlock(self);
+        }else{
+            NSLog(@"DLRequest serialization error: %@", serializeError);
+        }
+        return;
+    }
     for (NSString *key in [_headers allKeys]) {
         [request setValue:[_headers objectForKey:key] forHTTPHeaderField:key];
     }
     
-    [manager HTTPRequestOperationWithRequest:request success:nil failure:nil];
+    NSLog(@"%@", _url);
+    _operation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self setError:nil];
+        [self setResponse:responseObject];
+        if(_completionBlock != nil){
+            _completionBlock(self);
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self setError:error];
+        [self setResponse:[operation responseObject]];
+        if(_completionBlock != nil){
+            _completionBlock(self);
+        }
+    }];
+    [_operation start];
 }
 
 - (void)setValue:(NSString*)value forHeader:(NSString *)header
 {
     [_headers setValue:value forKey:header];
-}
-
-- (void)setCompletionBlockWithSuccess:(void (^)(DLRequest *request, id response))success
-                              failure:(void (^)(DLRequest *request, NSError* error))failure
-{
-    
 }
 
 @end

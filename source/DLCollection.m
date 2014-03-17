@@ -36,7 +36,7 @@
 
 - (void)getWithBlock:(void (^)(DLRequest *request))block
 {
-    [_client GET:_segments parameters:[self query] success:nil failure:nil];
+    [_client GET:_segments parameters:[self query] block:block];
 }
 
 - (void)getFirstWithBlock:(void (^)(DLRequest *request))block
@@ -82,44 +82,42 @@
 
 - (void)create:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
-    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"data", params, nil];
-    [_client POST:_segments parameters:dict success:nil failure:nil];
+    [_client POST:_segments parameters:@{@"data":params} block:block];
 }
 
 - (void)update:(int)itemId withParams:(NSDictionary*)params andBlock:(void (^)(DLRequest *request))block
 {
-    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"data", params, nil];
     NSString *url = [NSString stringWithFormat:@"%@/%i", _segments, itemId];
-    [_client POST:url parameters:dict success:nil failure:nil];
+    [_client POST:url parameters:@{@"data":params} block:block];
 }
 
 - (void)updateAll:(NSDictionary*)params withBlock:(void (^)(DLRequest *request))block
 {
     [_options setObject:params forKey:@"data"];
-    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
+    [_client PUT:_segments parameters:[self query] block:block];
 }
 
 - (void)increment:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block
 {
     [self optionsOperation:@"increment" withField:field andValue:value];
-    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
+    [_client PUT:_segments parameters:[self query] block:block];
 }
 
 - (void)decrement:(NSString*)field value:(id)value withBlock:(void (^)(DLRequest *request))block
 {
     [self optionsOperation:@"decrement" withField:field andValue:value];
-    [_client PUT:_segments parameters:[self query] success:nil failure:nil];
+    [_client PUT:_segments parameters:[self query] block:block];
 }
 
 - (void)remove:(int)itemId withBlock:(void (^)(DLRequest *request))block
 {
     NSString *url = [NSString stringWithFormat:@"%@/%i", _segments, itemId];
-    [_client DELETE:url success:nil failure:nil];
+    [_client DELETE:url block:block];
 }
 
 - (void)dropWithBlock:(void (^)(DLRequest *request))block
 {
-    [_client DELETE:_segments success:nil failure:nil];
+    [_client DELETE:_segments block:block];
 }
 
 - (instancetype)where:(NSString*)field andValue:(id)value

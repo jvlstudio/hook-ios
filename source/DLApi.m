@@ -19,6 +19,7 @@
     
     _key = key;
     _appId = appId;
+    _url = url;
     _auth = [[DLAuth alloc] initWithClient:self];
     _files = [[DLFiles alloc] initWithClient:self];
     _keys = [[DLKeyValues alloc] initWithClient:self];
@@ -41,47 +42,37 @@
 
 - (DLRequest*)GET:(NSString*) segments
        parameters:(NSDictionary*)params
-          success:(void (^)(DLRequest *request, id response))success
-          failure:(void (^)(DLRequest *request, NSError* error))failure
+            block:(DLRequestBlock)block
 {
-    return [self requestWithMethod:@"GET" segments:segments parameters:params
-                           success:success failure:failure];
+    return [self requestWithMethod:@"GET" segments:segments parameters:params block:block];
 }
 
 - (DLRequest*)POST:(NSString*) segments
         parameters:(NSDictionary*)params
-           success:(void (^)(DLRequest *request, id response))success
-           failure:(void (^)(DLRequest *request, NSError* error))failure
+            block:(DLRequestBlock)block
 {
-    return [self requestWithMethod:@"POST" segments:segments parameters:params
-                           success:success failure:failure];
+    return [self requestWithMethod:@"POST" segments:segments parameters:params block:block];
 
 }
 
 - (DLRequest*)PUT:(NSString*) segments
        parameters:(NSDictionary*)params
-          success:(void (^)(DLRequest *request, id response))success
-          failure:(void (^)(DLRequest *request, NSError* error))failure
+            block:(DLRequestBlock)block
 {
-    return [self requestWithMethod:@"PUT" segments:segments parameters:params
-                           success:success failure:failure];
+    return [self requestWithMethod:@"PUT" segments:segments parameters:params block:block];
 
 }
 
-- (DLRequest*)DELETE:(NSString*) segments
-             success:(void (^)(DLRequest *request, id response))success
-             failure:(void (^)(DLRequest *request, NSError* error))failure
+- (DLRequest*)DELETE:(NSString*) segments block:(DLRequestBlock)block
 {
-    return [self requestWithMethod:@"DELETE" segments:segments parameters:nil
-                           success:success failure:failure];
+    return [self requestWithMethod:@"DELETE" segments:segments parameters:nil block:block];
 
 }
 
 - (DLRequest*)requestWithMethod:(NSString*)method
                        segments:(NSString*)segments
                      parameters:(NSDictionary*)params
-                        success:(void (^)(DLRequest *request, id response))success
-                        failure:(void (^)(DLRequest *request, NSError* error))failure
+                          block:(DLRequestBlock)block
 {
     NSString *url = [NSString stringWithFormat:@"%@/%@", _url, segments];
     DLRequest *request = [[DLRequest alloc] initWithURL:url];
@@ -95,7 +86,7 @@
         [request setValue:_auth.authToken forKey:@"X-Auth-Token"];
     }
     
-    [request setCompletionBlockWithSuccess:success failure:failure];
+    [request setCompletionBlock:block];
     [request execute];
     return request;
 }
