@@ -16,6 +16,9 @@
         return nil;
     }
     _client = client;
+    
+    //TODO: implement Channel API
+    @throw[NSException exceptionWithName:@"DLChannel" reason:@"Not implemented" userInfo:nil];
     return self;
 }
 @end

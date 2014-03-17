@@ -16,6 +16,8 @@
         return nil;
     }
     _client = client;
+    //TODO: Implement Files API
+    @throw[NSException exceptionWithName:@"DLFiles" reason:@"Not implemented" userInfo:nil];
     return self;
 }
 @end

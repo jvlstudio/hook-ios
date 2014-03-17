@@ -21,7 +21,7 @@
     _appId = appId;
     _url = url;
     _auth = [[DLAuth alloc] initWithClient:self];
-    _files = [[DLFiles alloc] initWithClient:self];
+    //_files = [[DLFiles alloc] initWithClient:self];
     _keys = [[DLKeyValues alloc] initWithClient:self];
     _system = [[DLSystem alloc] initWithClient:self];
     
