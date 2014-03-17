@@ -19,4 +19,10 @@
     _client = client;
     return self;
 }
+
+-(void)getTimeWithBlock:(DLRequestBlock)block
+{
+    [_client GET:@"system/time" parameters:nil block:block];
+}
+
 @end

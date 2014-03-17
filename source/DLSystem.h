@@ -14,4 +14,5 @@
 @interface DLSystem : NSObject
 @property(readonly, assign) DLApi* client;
 -(instancetype)initWithClient:(DLApi*)client;
+-(void)getTimeWithBlock:(DLRequestBlock)block;
 @end
