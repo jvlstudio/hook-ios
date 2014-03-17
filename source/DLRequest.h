@@ -11,9 +11,10 @@
 @interface DLRequest : NSObject
 @property(nonatomic, retain) NSString* method;
 @property(nonatomic, retain) NSDictionary* data;
+@property(nonatomic, retain) NSDictionary* headers;
 @property(nonatomic, retain) NSString* url;
 
-- (void)start;
+- (void)execute;
 - (instancetype)initWithURL:(NSString*)url;
 - (void)setValue:(NSString*)value forHeader:(NSString *)header;
 - (void)setCompletionBlockWithSuccess:(void (^)(DLRequest *request, id response))success
