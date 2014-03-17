@@ -53,19 +53,30 @@ NSDictionary* dict = @{@"name" : @"Gabriel", @"age" : [NSNumber numberWithInt:25
 - See [DLCollection header](https://github.com/doubleleft/dl-api-ios/blob/master/source/DLCollection.h) for better reference
 
 ### Authentication: create user
-*TBD*
+```objc
+[api.auth authenticate:@{@"email":@"gabriel@doubleleft.com", @"password":@"12345"} usingProvider:@"email" block:^(DLRequest* request){
+    NSLog(@"auth-register %@", [request response]);
+}];
+```
 
 ### Authentication: create user w/ Facebook
-*TBD*
+```objc
+[api.auth authenticate:@{@"accessToken":@"SDAhouhqwoe193=", @"userID":@"12345"} usingProvider:@"facebook" block:^(DLRequest* request){
+    NSLog(@"auth-register-fb %@", [request response]);
+}];
+```
 
 ### Authentication: login user
-*TBD*
+```objc
+[api.auth verify:@{@"email":@"gabriel@doubleleft.com", @"password":@"12345"} usingProvider:@"email" block:^(DLRequest* request){
+    NSLog(@"auth-verify %@", [request response]);
+}];
+```
 
 ### Authentication: other methods
 - `forgotPassword`
 - `resetPassword`
 - `logout`
-- `getAuthToken`
 - `hasAuthToken`
 - See [DLAuth header](https://github.com/doubleleft/dl-api-ios/blob/master/source/DLAuth.h) for better reference
 
