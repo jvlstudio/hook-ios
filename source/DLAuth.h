@@ -18,5 +18,10 @@
 
 - (instancetype)initWithClient:(DLApi*)client;
 - (BOOL)hasAuthToken;
+- (void)authenticate:(NSDictionary*)data usingProvider:(NSString*)provider block:(DLRequestBlock)block;
+- (void)verify:(NSDictionary*)data usingProvider:(NSString*)provider block:(DLRequestBlock)block;;
+- (void)forgotPassword:(NSDictionary*)data block:(DLRequestBlock)block;
+- (void)resetPassword:(NSDictionary*)data block:(DLRequestBlock)block;
+- (void)logout;
 
 @end
