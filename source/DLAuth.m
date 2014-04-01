@@ -81,6 +81,7 @@ NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
     if(_user == NULL){
         [defaults removeObjectForKey:_authTokenKey];
         [defaults removeObjectForKey:_authDataKey];
+        _authToken = nil;
     }else{
         NSData *encodedData = [NSKeyedArchiver archivedDataWithRootObject:data];
         [defaults setObject:encodedData forKey:_authDataKey];
@@ -92,10 +93,10 @@ NSString* const AUTH_DATA_KEY = @"dl-api-auth-data";
 - (void)registerAuthToken:(NSDictionary*)data
 {
     if([data objectForKey:@"token"]){
-        NSString *token = [data objectForKey:@"token"];
-        _authToken = token;
+        NSDictionary *tokenDict = [data objectForKey:@"token"];
+        _authToken = [tokenDict objectForKey:@"token"];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:token forKey:_authTokenKey];
+        [defaults setObject:tokenDict forKey:_authTokenKey];
         [defaults synchronize];
         [self registerUser:data];
     }
