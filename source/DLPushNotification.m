@@ -35,13 +35,12 @@
     NSString *appName = [infoPList objectForKey:@"CFBundleDisplayName"];
     NSString *appVersion = [infoPList objectForKey:@"CFBundleVersion"];
 
-    NSMutableDictionary *postParams = @{
+    return [_client POST:@"push/registration" parameters:@{
        @"app_name": appName,
        @"app_version": appVersion,
-       @"device_id": deviceId
-    };
-
-    return [_client POST:@"push/registration" parameters:postParams];
+       @"device_id": deviceId,
+       @"platform": @"ios"
+    }];
 }
 
 @end
