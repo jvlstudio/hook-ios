@@ -16,15 +16,16 @@
     if (!self) {
         return nil;
     }
-    
+
     _key = key;
     _appId = appId;
     _url = url;
     _auth = [[DLAuth alloc] initWithClient:self];
     //_files = [[DLFiles alloc] initWithClient:self];
-    _keys = [[DLKeyValues alloc] initWithClient:self];
     _system = [[DLSystem alloc] initWithClient:self];
-    
+    _keys = [[DLKeyValues alloc] initWithClient:self];
+    _push = [[DLPushNotification alloc] initWithClient:self];
+
     return self;
 }
 
@@ -81,11 +82,11 @@
     [request setValue:@"application/json" forHeader:@"Content-Type"];
     [request setValue:_appId forHeader:@"X-App-Id"];
     [request setValue:_key forHeader:@"X-App-Key"];
-    
+
     if([_auth hasAuthToken]){
         [request setValue:_auth.authToken forHeader:@"X-Auth-Token"];
     }
-    
+
     [request setCompletionBlock:block];
     [request execute];
     return request;

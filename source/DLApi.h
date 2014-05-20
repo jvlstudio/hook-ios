@@ -31,6 +31,7 @@
 @property (readonly, strong) DLFiles* files;
 @property (readonly, strong) DLSystem* system;
 @property (readonly, strong) DLKeyValues* keys;
+@property (readonly, strong) DLPushNotification* push;
 
 - (instancetype)initWithURL:(NSString*) url key:(NSString*)key appId:(NSString*)appId;
 
