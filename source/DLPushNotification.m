@@ -20,14 +20,28 @@
     return self;
 }
 
--(DLRequest*)register:(NSDictionary*)params
+-(DLRequest*)register:(NSData*)deviceToken
 {
-    /* device_id: register for push notification */
-    /* app_name: get app name dynamically */
-    /* app_version: get app version dynamically */
-    /* platform: ios */
+    const char* data = [deviceToken bytes];
+    NSMutableString* token = [NSMutableString string];
 
-    return [_client POST:@"push/registration" parameters:@{@"data":params}];
+    for (int i = 0; i < [deviceToken length]; i++) {
+        [token appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    NSString *deviceId = [token copy];
+
+    NSDictionary *infoPList = [[NSBundle mainBundle] infoDictionary];
+    NSString *appName = [infoPList objectForKey:@"CFBundleDisplayName"];
+    NSString *appVersion = [infoPList objectForKey:@"CFBundleVersion"];
+
+    NSMutableDictionary *postParams = @{
+       @"app_name": appName,
+       @"app_version": appVersion,
+       @"device_id": deviceId
+    };
+
+    return [_client POST:@"push/registration" parameters:postParams];
 }
 
 @end
